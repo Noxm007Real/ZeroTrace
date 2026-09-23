@@ -1,0 +1,6 @@
+{
+  "rewrites": [
+    { "source": "/s/:token", "destination": "/gate.html" },
+    { "source": "/api/:match*", "destination": "/api/:match*" }
+  ]
+}
