@@ -3,37 +3,278 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ZeroTrace - Anti-Trace Gateway</title>
+  <title>ZeroTrace - Dashboard</title>
   <style>
     :root {
       --bg: #fdfaf6;
       --card: #ffffff;
       --border: #000000;
-      --primary: #8de0b3;
-      --secondary: #ffda59;
+      --primary: #8de0b3;     /* Mint Green */
+      --secondary: #ffda59;   /* Yellow */
+      --discord: #a3b8ff;     /* Neo-brutalist Discord Blue */
       --text: #000000;
     }
+    
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; }
     body { background: var(--bg); color: var(--text); display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; padding: 1.5rem; }
     
+    /* Main Container */
     .container { 
-      background: var(--card); 
-      border: 3px solid var(--border); 
-      border-radius: 16px; 
-      padding: 2.5rem; 
       width: 100%; 
-      max-width: 460px; 
-      box-shadow: 6px 6px 0px var(--border); 
-      text-align: center; 
+      max-width: 480px; 
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
     }
-    
-    .badge { 
-      display: inline-block; 
-      padding: 0.4rem 1rem; 
-      background: var(--secondary); 
-      border: 2px solid var(--border); 
+
+    /* Status Badge */
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--secondary);
+      border: 3px solid var(--border);
+      padding: 0.4rem 0.8rem;
+      border-radius: 99px;
+      font-weight: 800;
+      font-size: 0.8rem;
+      text-transform: uppercase;
       box-shadow: 3px 3px 0px var(--border);
+      align-self: flex-start;
+    }
+    .status-dot { width: 10px; height: 10px; background: var(--primary); border: 2px solid var(--border); border-radius: 50%; }
+
+    /* Greeting Section */
+    .greeting-wrapper { display: flex; align-items: center; gap: 0.5rem; margin-top: 0.5rem; }
+    .greeting-box {
+      background: var(--primary);
+      border: 3px solid var(--border);
+      padding: 0.5rem 1rem;
+      border-radius: 99px;
+      font-size: 1.8rem;
+      font-weight: 900;
+      box-shadow: 4px 4px 0px var(--border);
+      letter-spacing: -0.03em;
+    }
+    .greeting-circle { width: 16px; height: 16px; background: var(--border); border-radius: 50%; }
+    
+    .subtitle { font-size: 0.95rem; line-height: 1.5; font-weight: 500; margin-bottom: 0.5rem; }
+
+    /* Time Widget */
+    .time-widget {
+      background: var(--card);
+      border: 3px solid var(--border);
+      border-radius: 12px;
+      padding: 0.75rem 1rem;
+      display: inline-flex;
+      flex-direction: column;
+      align-self: flex-start;
+      box-shadow: 4px 4px 0px var(--border);
+    }
+    .time-label { font-size: 0.75rem; font-weight: 800; text-transform: uppercase; margin-bottom: 0.25rem; }
+    .time-value { font-size: 1.5rem; font-weight: 900; letter-spacing: 0.05em; }
+
+    /* Action Card (Generator) */
+    .action-card {
+      background: var(--card);
+      border: 3px solid var(--border);
+      border-radius: 16px;
+      padding: 1.5rem;
+      box-shadow: 6px 6px 0px var(--border);
+      position: relative;
+    }
+    .action-icon {
+      position: absolute;
+      top: 1.5rem;
+      right: 1.5rem;
+      background: var(--secondary);
+      border: 3px solid var(--border);
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+    }
+    .action-title { font-size: 0.8rem; font-weight: 800; text-transform: uppercase; color: #666; margin-bottom: 1rem; letter-spacing: 0.05em; }
+    
+    input { 
+      width: 100%; 
+      padding: 1rem; 
+      background: var(--bg); 
+      border: 3px solid var(--border); 
+      border-radius: 12px; 
+      font-size: 1rem; 
+      font-weight: 600;
+      outline: none; 
+      margin-bottom: 1rem; 
+      transition: all 0.2s;
+    }
+    input:focus { box-shadow: 4px 4px 0px var(--primary); transform: translate(-2px, -2px); }
+    
+    button { 
+      width: 100%; 
+      padding: 1rem; 
+      background: var(--primary); 
       color: var(--text); 
+      border: 3px solid var(--border); 
+      border-radius: 12px; 
+      box-shadow: 4px 4px 0px var(--border);
+      font-size: 1rem; 
+      font-weight: 800; 
+      cursor: pointer; 
+      transition: all 0.1s; 
+    }
+    button:active { transform: translate(4px, 4px); box-shadow: 0px 0px 0px var(--border); }
+    
+    .result { display: none; margin-top: 1.5rem; text-align: left; background: var(--bg); border: 3px solid var(--border); border-radius: 12px; padding: 1rem; }
+    .result label { font-size: 0.8rem; font-weight: 800; text-transform: uppercase; }
+    .result a { color: var(--text); font-weight: 700; word-break: break-all; text-decoration: none; display: block; margin-top: 0.5rem; font-size: 0.95rem; }
+
+    /* Community Widget */
+    .community-card {
+      background: var(--card);
+      border: 3px solid var(--border);
+      border-radius: 16px;
+      padding: 1.5rem;
+      box-shadow: 6px 6px 0px var(--border);
+      position: relative;
+    }
+    .com-header { display: flex; align-items: center; gap: 0.5rem; font-weight: 800; font-size: 1.1rem; margin-bottom: 0.75rem; }
+    .com-dot { width: 12px; height: 12px; background: var(--primary); border: 2px solid var(--border); border-radius: 50%; }
+    .com-desc { font-size: 0.9rem; font-weight: 500; line-height: 1.5; margin-bottom: 1.25rem; }
+    
+    .com-buttons { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+    .btn-com {
+      flex: 1;
+      min-width: 100px;
+      text-align: center;
+      padding: 0.75rem;
+      border: 3px solid var(--border);
+      border-radius: 12px;
+      font-weight: 800;
+      font-size: 0.9rem;
+      text-decoration: none;
+      color: var(--text);
+      box-shadow: 3px 3px 0px var(--border);
+      transition: transform 0.1s;
+    }
+    .btn-com:active { transform: translate(3px, 3px); box-shadow: 0px 0px 0px var(--border); }
+    .btn-wa { background: var(--primary); }
+    .btn-tg { background: var(--secondary); }
+    .btn-dc { background: var(--discord); }
+
+  </style>
+</head>
+<body>
+  
+  <div class="container">
+    
+    <div class="status-badge">
+      <div class="status-dot"></div> CLUSTER ONLINE
+    </div>
+
+    <div class="greeting-wrapper">
+      <div class="greeting-box" id="greetingText">Good Night, noxm007</div>
+      <div class="greeting-circle"></div>
+    </div>
+
+    <p class="subtitle">Your control plane. Sembunyikan URL, lindungi akses, dan hindari pelacakan bot dari satu tempat.</p>
+
+    <div class="time-widget">
+      <div class="time-label">Local Time</div>
+      <div class="time-value" id="clock">00.00.00</div>
+    </div>
+
+    <div class="action-card">
+      <div class="action-title">Generate Links</div>
+      <div class="action-icon">⚡</div>
+      
+      <input type="url" id="targetUrl" placeholder="https://example.com/rahasia" required />
+      <button onclick="createZeroTrace()">Deploy Gateway URL</button>
+
+      <div id="resultBox" class="result">
+        <label>Gateway Aktif</label>
+        <a id="linkResult" href="#" target="_blank"></a>
+      </div>
+    </div>
+
+    <div class="community-card">
+      <div class="com-header">
+        <div class="com-dot"></div> Join Community
+      </div>
+      <p class="com-desc">Gabung ke saluran WhatsApp, grup Telegram, & server Discord resmi untuk update terbaru dan info maintenance.</p>
+      <div class="com-buttons">
+        <a href="https://chat.whatsapp.com/B9t6HZLK8IS01S4o6fmyAY" class="btn-com btn-wa">WhatsApp</a>
+        <a href="https://t.me/slowliving_w_nox" class="btn-com btn-tg">Telegram</a>
+        <a href="https://discord.gg/TxxXY9ZF2" class="btn-com btn-dc">Discord</a>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    // Dinamis Sapaan Berdasarkan Waktu
+    function updateGreeting() {
+      const hour = new Date().getHours();
+      let greeting = "Good Night";
+      if (hour >= 5 && hour < 12) greeting = "Good Morning";
+      else if (hour >= 12 && hour < 15) greeting = "Good Afternoon";
+      else if (hour >= 15 && hour < 19) greeting = "Good Evening";
+      
+      document.getElementById('greetingText').innerText = `${greeting}, noxm007`;
+    }
+
+    // Jam Real-time
+    function updateClock() {
+      const now = new Date();
+      // Mengubah format 18:07:53 menjadi 18.07.53
+      const timeString = now.toLocaleTimeString('id-ID', { hour12: false }).replace(/:/g, '.');
+      document.getElementById('clock').innerText = timeString;
+    }
+
+    updateGreeting();
+    updateClock();
+    setInterval(updateClock, 1000);
+
+    // Fungsi Generate Link
+    async function createZeroTrace() {
+      const url = document.getElementById('targetUrl').value.trim();
+      if (!url) return alert('Harap masukkan URL yang valid!');
+
+      const btn = document.querySelector('button');
+      btn.innerText = 'Memproses...';
+      btn.disabled = true;
+
+      try {
+        const res = await fetch('/api/create', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ url })
+        });
+        const data = await res.json();
+        if (data.token) {
+          const out = `${window.location.origin}/s/${data.token}`;
+          const box = document.getElementById('resultBox');
+          const link = document.getElementById('linkResult');
+          link.href = out;
+          link.innerText = out;
+          box.style.display = 'block';
+        } else {
+          alert(data.error || 'Terjadi kesalahan.');
+        }
+      } catch (err) {
+        alert('Gagal terhubung ke API.');
+      } finally {
+        btn.innerText = 'Deploy Gateway URL';
+        btn.disabled = false;
+      }
+    }
+  </script>
+</body>
+</html>
+
       border-radius: 9999px; 
       font-size: 0.8rem; 
       font-weight: 800; 
