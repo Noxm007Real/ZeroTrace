@@ -14,67 +14,50 @@
       --discord: #a3b8ff;     /* Neo-brutalist Discord Blue */
       --text: #000000;
     }
-    
+
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; }
-    body { background: var(--bg); color: var(--text); display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; padding: 1.5rem; }
-    
-    /* Main Container */
-    .container { 
-      width: 100%; 
-      max-width: 480px; 
+    body { background: var(--bg); color: var(--text); display: flex; flex-direction: column; align-items: center; justify-content: flex-start; min-height: 100vh; padding: 2.5rem 1.5rem; }
+
+    .container {
+      width: 100%;
+      max-width: 480px;
       display: flex;
       flex-direction: column;
-      gap: 1.25rem;
+      gap: 1.5rem;
     }
-
-    /* Status Badge */
-    .status-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      background: var(--secondary);
-      border: 3px solid var(--border);
-      padding: 0.4rem 0.8rem;
-      border-radius: 99px;
-      font-weight: 800;
-      font-size: 0.8rem;
-      text-transform: uppercase;
-      box-shadow: 3px 3px 0px var(--border);
-      align-self: flex-start;
-    }
-    .status-dot { width: 10px; height: 10px; background: var(--primary); border: 2px solid var(--border); border-radius: 50%; }
 
     /* Greeting Section */
-    .greeting-wrapper { display: flex; align-items: center; gap: 0.5rem; margin-top: 0.5rem; }
+    .greeting-wrapper { display: flex; align-items: center; gap: 0.5rem; }
     .greeting-box {
       background: var(--primary);
       border: 3px solid var(--border);
-      padding: 0.5rem 1rem;
-      border-radius: 99px;
+      padding: 1rem 1.5rem;
+      border-radius: 16px; /* Tidak terlalu bundar */
       font-size: 1.8rem;
       font-weight: 900;
-      box-shadow: 4px 4px 0px var(--border);
+      box-shadow: 6px 6px 0px var(--border);
       letter-spacing: -0.03em;
+      line-height: 1.2;
     }
-    .greeting-circle { width: 16px; height: 16px; background: var(--border); border-radius: 50%; }
-    
-    .subtitle { font-size: 0.95rem; line-height: 1.5; font-weight: 500; margin-bottom: 0.5rem; }
+    .greeting-circle { width: 16px; height: 16px; background: var(--border); border-radius: 50%; flex-shrink: 0; }
+
+    .subtitle { font-size: 1rem; line-height: 1.5; font-weight: 500; color: #111; }
 
     /* Time Widget */
     .time-widget {
       background: var(--card);
       border: 3px solid var(--border);
       border-radius: 12px;
-      padding: 0.75rem 1rem;
+      padding: 0.8rem 1.2rem;
       display: inline-flex;
       flex-direction: column;
       align-self: flex-start;
-      box-shadow: 4px 4px 0px var(--border);
+      box-shadow: 5px 5px 0px var(--border);
     }
-    .time-label { font-size: 0.75rem; font-weight: 800; text-transform: uppercase; margin-bottom: 0.25rem; }
-    .time-value { font-size: 1.5rem; font-weight: 900; letter-spacing: 0.05em; }
+    .time-label { font-size: 0.75rem; font-weight: 800; text-transform: uppercase; margin-bottom: 0.2rem; letter-spacing: 0.05em; color: #444; }
+    .time-value { font-size: 1.8rem; font-weight: 900; letter-spacing: 0.05em; }
 
-    /* Action Card (Generator) */
+    /* Action Card (Generate Links) */
     .action-card {
       background: var(--card);
       border: 3px solid var(--border);
@@ -85,8 +68,8 @@
     }
     .action-icon {
       position: absolute;
-      top: 1.5rem;
-      right: 1.5rem;
+      top: -12px;
+      right: 20px;
       background: var(--secondary);
       border: 3px solid var(--border);
       width: 32px;
@@ -95,39 +78,40 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-weight: 900;
+      box-shadow: 3px 3px 0px var(--border);
     }
-    .action-title { font-size: 0.8rem; font-weight: 800; text-transform: uppercase; color: #666; margin-bottom: 1rem; letter-spacing: 0.05em; }
-    
-    input { 
-      width: 100%; 
-      padding: 1rem; 
-      background: var(--bg); 
-      border: 3px solid var(--border); 
-      border-radius: 12px; 
-      font-size: 1rem; 
+    .action-title { font-size: 0.85rem; font-weight: 800; text-transform: uppercase; color: #555; margin-bottom: 1rem; letter-spacing: 0.05em; }
+
+    input {
+      width: 100%;
+      padding: 1.2rem;
+      background: var(--card);
+      border: 3px solid var(--border);
+      border-radius: 12px;
+      font-size: 1rem;
       font-weight: 600;
-      outline: none; 
-      margin-bottom: 1rem; 
+      outline: none;
+      margin-bottom: 1rem;
+      box-shadow: 4px 4px 0px var(--primary); /* Efek shadow hijau di belakang form */
       transition: all 0.2s;
     }
-    input:focus { box-shadow: 4px 4px 0px var(--primary); transform: translate(-2px, -2px); }
-    
-    button { 
-      width: 100%; 
-      padding: 1rem; 
-      background: var(--primary); 
-      color: var(--text); 
-      border: 3px solid var(--border); 
-      border-radius: 12px; 
+    input:focus { transform: translate(2px, 2px); box-shadow: 2px 2px 0px var(--primary); }
+
+    button {
+      width: 100%;
+      padding: 1.2rem;
+      background: var(--primary);
+      color: var(--text);
+      border: 3px solid var(--border);
+      border-radius: 12px;
       box-shadow: 4px 4px 0px var(--border);
-      font-size: 1rem; 
-      font-weight: 800; 
-      cursor: pointer; 
-      transition: all 0.1s; 
+      font-size: 1rem;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.1s;
     }
     button:active { transform: translate(4px, 4px); box-shadow: 0px 0px 0px var(--border); }
-    
+
     .result { display: none; margin-top: 1.5rem; text-align: left; background: var(--bg); border: 3px solid var(--border); border-radius: 12px; padding: 1rem; }
     .result label { font-size: 0.8rem; font-weight: 800; text-transform: uppercase; }
     .result a { color: var(--text); font-weight: 700; word-break: break-all; text-decoration: none; display: block; margin-top: 0.5rem; font-size: 0.95rem; }
@@ -139,58 +123,53 @@
       border-radius: 16px;
       padding: 1.5rem;
       box-shadow: 6px 6px 0px var(--border);
-      position: relative;
     }
-    .com-header { display: flex; align-items: center; gap: 0.5rem; font-weight: 800; font-size: 1.1rem; margin-bottom: 0.75rem; }
+    .com-header { display: flex; align-items: center; gap: 0.5rem; font-weight: 800; font-size: 1.2rem; margin-bottom: 0.75rem; }
     .com-dot { width: 12px; height: 12px; background: var(--primary); border: 2px solid var(--border); border-radius: 50%; }
-    .com-desc { font-size: 0.9rem; font-weight: 500; line-height: 1.5; margin-bottom: 1.25rem; }
-    
-    .com-buttons { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+    .com-desc { font-size: 0.95rem; font-weight: 500; line-height: 1.5; margin-bottom: 1.5rem; color: #222; }
+
+    .com-buttons { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+    .com-buttons-row { display: flex; gap: 0.75rem; width: 100%; }
     .btn-com {
       flex: 1;
-      min-width: 100px;
       text-align: center;
-      padding: 0.75rem;
+      padding: 0.85rem;
       border: 3px solid var(--border);
       border-radius: 12px;
       font-weight: 800;
-      font-size: 0.9rem;
+      font-size: 0.95rem;
       text-decoration: none;
       color: var(--text);
-      box-shadow: 3px 3px 0px var(--border);
+      box-shadow: 4px 4px 0px var(--border);
       transition: transform 0.1s;
     }
-    .btn-com:active { transform: translate(3px, 3px); box-shadow: 0px 0px 0px var(--border); }
+    .btn-com:active { transform: translate(4px, 4px); box-shadow: 0px 0px 0px var(--border); }
     .btn-wa { background: var(--primary); }
     .btn-tg { background: var(--secondary); }
-    .btn-dc { background: var(--discord); }
+    .btn-dc { background: var(--discord); width: 100%; }
 
   </style>
 </head>
 <body>
-  
+
   <div class="container">
-    
-    <div class="status-badge">
-      <div class="status-dot"></div> CLUSTER ONLINE
-    </div>
 
     <div class="greeting-wrapper">
-      <div class="greeting-box" id="greetingText">Good Night, noxm007</div>
+      <div class="greeting-box" id="greetingText">Good Night,<br>noxm007</div>
       <div class="greeting-circle"></div>
     </div>
 
     <p class="subtitle">Your control plane. Sembunyikan URL, lindungi akses, dan hindari pelacakan bot dari satu tempat.</p>
 
     <div class="time-widget">
-      <div class="time-label">Local Time</div>
+      <div class="time-label">LOCAL TIME</div>
       <div class="time-value" id="clock">00.00.00</div>
     </div>
 
     <div class="action-card">
-      <div class="action-title">Generate Links</div>
+      <div class="action-title">GENERATE LINKS</div>
       <div class="action-icon">⚡</div>
-      
+
       <input type="url" id="targetUrl" placeholder="https://example.com/rahasia" required />
       <button onclick="createZeroTrace()">Deploy Gateway URL</button>
 
@@ -206,8 +185,10 @@
       </div>
       <p class="com-desc">Gabung ke saluran WhatsApp, grup Telegram, & server Discord resmi untuk update terbaru dan info maintenance.</p>
       <div class="com-buttons">
-        <a href="https://chat.whatsapp.com/B9t6HZLK8IS01S4o6fmyAY" class="btn-com btn-wa">WhatsApp</a>
-        <a href="https://t.me/slowliving_w_nox" class="btn-com btn-tg">Telegram</a>
+        <div class="com-buttons-row">
+          <a href="https://chat.whatsapp.com/B9t6HZLK8IS01S4o6fmyAY" class="btn-com btn-wa">WhatsApp</a>
+          <a href="https://t.me/slowliving_w_nox" class="btn-com btn-tg">Telegram</a>
+        </div>
         <a href="https://discord.gg/TxxXY9ZF2" class="btn-com btn-dc">Discord</a>
       </div>
     </div>
@@ -218,18 +199,22 @@
     // Dinamis Sapaan Berdasarkan Waktu
     function updateGreeting() {
       const hour = new Date().getHours();
-      let greeting = "Good Night";
-      if (hour >= 5 && hour < 12) greeting = "Good Morning";
-      else if (hour >= 12 && hour < 15) greeting = "Good Afternoon";
-      else if (hour >= 15 && hour < 19) greeting = "Good Evening";
+      let greeting = "Good Night"; // Default jam 18:00 ke atas sampai malam
       
-      document.getElementById('greetingText').innerText = `${greeting}, noxm007`;
+      if (hour >= 5 && hour < 12) {
+        greeting = "Good Morning";
+      } else if (hour >= 12 && hour < 15) {
+        greeting = "Good Afternoon";
+      } else if (hour >= 15 && hour < 18) { // Sore dibatasi sampai jam 17:59
+        greeting = "Good Evening";
+      }
+
+      document.getElementById('greetingText').innerHTML = `${greeting},<br>noxm007`;
     }
 
     // Jam Real-time
     function updateClock() {
       const now = new Date();
-      // Mengubah format 18:07:53 menjadi 18.07.53
       const timeString = now.toLocaleTimeString('id-ID', { hour12: false }).replace(/:/g, '.');
       document.getElementById('clock').innerText = timeString;
     }
@@ -268,112 +253,6 @@
         alert('Gagal terhubung ke API.');
       } finally {
         btn.innerText = 'Deploy Gateway URL';
-        btn.disabled = false;
-      }
-    }
-  </script>
-</body>
-</html>
-
-      border-radius: 9999px; 
-      font-size: 0.8rem; 
-      font-weight: 800; 
-      letter-spacing: 0.05em; 
-      text-transform: uppercase; 
-      margin-bottom: 1.5rem; 
-    }
-    
-    h1 { font-size: 2rem; font-weight: 800; margin-bottom: 0.5rem; letter-spacing: -0.03em; }
-    p { font-size: 0.95rem; line-height: 1.5; margin-bottom: 1.75rem; font-weight: 500; }
-    
-    input { 
-      width: 100%; 
-      padding: 1rem; 
-      background: var(--card); 
-      border: 3px solid var(--border); 
-      border-radius: 12px; 
-      color: var(--text); 
-      font-size: 1rem; 
-      font-weight: 600;
-      outline: none; 
-      margin-bottom: 1rem; 
-      transition: all 0.2s;
-    }
-    input:focus { box-shadow: 4px 4px 0px var(--primary); transform: translate(-2px, -2px); }
-    
-    button { 
-      width: 100%; 
-      padding: 1rem; 
-      background: var(--primary); 
-      color: var(--text); 
-      border: 3px solid var(--border); 
-      border-radius: 12px; 
-      box-shadow: 4px 4px 0px var(--border);
-      font-size: 1rem; 
-      font-weight: 800; 
-      cursor: pointer; 
-      transition: all 0.1s; 
-    }
-    button:active { transform: translate(4px, 4px); box-shadow: 0px 0px 0px var(--border); }
-    
-    .result { display: none; margin-top: 1.5rem; text-align: left; background: var(--card); border: 3px solid var(--border); border-radius: 12px; padding: 1rem; box-shadow: 4px 4px 0px var(--secondary); }
-    .result label { font-size: 0.8rem; font-weight: 800; text-transform: uppercase; }
-    .result a { color: var(--text); font-weight: 700; word-break: break-all; text-decoration: none; display: block; margin-top: 0.5rem; font-size: 0.95rem; }
-    .result a:hover { text-decoration: underline; }
-    
-    footer { margin-top: 2rem; font-size: 0.85rem; font-weight: 600; }
-    footer span { background: var(--primary); padding: 0.1rem 0.4rem; border: 2px solid var(--border); border-radius: 4px; }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <div class="badge">Zero-Trace Protocol</div>
-    <h1>ZeroTrace</h1>
-    <p>Sembunyikan URL tujuan asli di balik rantai tantangan enkriptik dinamis tanpa jejak bot.</p>
-    
-    <input type="url" id="targetUrl" placeholder="https://example.com/file-secret" required />
-    <button onclick="createZeroTrace()">Kunci & Terbitkan URL</button>
-
-    <div id="resultBox" class="result">
-      <label>Tautan Terproteksi</label>
-      <a id="linkResult" href="#" target="_blank"></a>
-    </div>
-  </div>
-
-  <footer>
-    Crafted by <span>noxm007</span>
-  </footer>
-
-  <script>
-    async function createZeroTrace() {
-      const url = document.getElementById('targetUrl').value.trim();
-      if (!url) return alert('Harap masukkan URL yang valid!');
-
-      const btn = document.querySelector('button');
-      btn.innerText = 'Mengenkripsi...';
-      btn.disabled = true;
-
-      try {
-        const res = await fetch('/api/create', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ url })
-        });
-        const data = await res.json();
-        if (data.token) {
-          const out = `${window.location.origin}/s/${data.token}`;
-          const box = document.getElementById('resultBox');
-          const link = document.getElementById('linkResult');
-          link.href = out;
-          link.innerText = out;
-          box.style.display = 'block';
-        } else {
-          alert(data.error || 'Terjadi kesalahan.');
-        }
-      } catch (err) {
-        alert('Gagal terhubung ke API.');
-      } finally {
-        btn.innerText = 'Kunci & Terbitkan URL';
         btn.disabled = false;
       }
     }
