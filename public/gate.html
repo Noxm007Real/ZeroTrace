@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Verifikasi Keamanan</title>
   <style>
-    /* Definisi Tema CLI */
+    /* Definisi Tema (Neo-Brutalist disertakan untuk pengacakan) */
+    body.theme-neo { --bg: #fdfaf6; --card: #ffffff; --border: #000000; --primary: #8de0b3; --secondary: #ffda59; --text: #000000; }
     body.theme-nord { --bg: #2e3440; --card: #3b4252; --border: #4c566a; --primary: #88c0d0; --secondary: #81a1c1; --text: #eceff4; }
     body.theme-dracula { --bg: #282a36; --card: #44475a; --border: #6272a4; --primary: #ff79c6; --secondary: #50fa7b; --text: #f8f8f2; }
     body.theme-gruvbox { --bg: #282828; --card: #3c3836; --border: #504945; --primary: #b8bb26; --secondary: #fabd2f; --text: #ebdbb2; }
@@ -18,24 +19,33 @@
     .card { background: var(--card); border: 3px solid var(--border); border-radius: 16px; padding: 2.5rem; width: 100%; max-width: 400px; box-shadow: 6px 6px 0px var(--border); text-align: center; }
     
     .spinner { border: 4px solid var(--bg); border-top: 4px solid var(--primary); border-radius: 50%; width: 40px; height: 40px; animation: spin 0.8s linear infinite; margin: 1.5rem auto; }
+    body.theme-neo .spinner { border: 4px solid var(--bg); border-top: 4px solid var(--border); }
     @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     
     h2 { font-size: 1.5rem; margin-bottom: 0.5rem; font-weight: bold; color: var(--primary); letter-spacing: -0.03em; }
+    body.theme-neo h2 { color: var(--text); }
+    
     p { font-size: 0.95rem; font-weight: bold; color: var(--text); opacity: 0.8; }
     
     .slider-track { width: 100%; height: 56px; background: var(--bg); border: 3px solid var(--border); border-radius: 28px; position: relative; overflow: hidden; margin-top: 1.5rem; user-select: none; box-shadow: 4px 4px 0px var(--border) inset; }
+    body.theme-neo .slider-track { background: var(--secondary); }
+    
     .slider-thumb { width: 50px; height: 50px; background: var(--primary); color: var(--bg); border: 3px solid var(--border); border-radius: 50%; position: absolute; left: 0; top: 0; cursor: grab; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.2rem; }
+    body.theme-neo .slider-thumb { color: var(--text); }
     .slider-thumb:active { cursor: grabbing; background: var(--secondary); }
+    body.theme-neo .slider-thumb:active { background: var(--card); }
     
     footer { margin-top: 2rem; font-size: 0.85rem; font-weight: bold; color: var(--secondary); }
+    body.theme-neo footer { color: var(--text); }
     footer span { background: var(--primary); color: var(--bg); padding: 0.1rem 0.4rem; border: 2px solid var(--border); border-radius: 4px; }
+    body.theme-neo footer span { color: var(--text); }
   </style>
 </head>
 <body>
 
-  <!-- Pengacak Tema Saat Halaman Dimuat -->
+  <!-- Pengacak Tema Saat Halaman Dimuat (Termasuk theme-neo) -->
   <script>
-    const themes = ['theme-nord', 'theme-dracula', 'theme-gruvbox', 'theme-matrix', 'theme-monokai'];
+    const themes = ['theme-neo', 'theme-nord', 'theme-dracula', 'theme-gruvbox', 'theme-matrix', 'theme-monokai'];
     document.body.className = themes[Math.floor(Math.random() * themes.length)];
   </script>
 
