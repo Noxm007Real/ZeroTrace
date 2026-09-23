@@ -1,0 +1,12 @@
+{
+  "name": "zerotrace",
+  "version": "1.0.0",
+  "description": "Stateless Cryptographic Zero-Trace Link Gateway",
+  "author": "noxm007",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "dev": "vercel dev"
+  },
+  "dependencies": {}
+}
