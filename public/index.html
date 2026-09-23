@@ -5,161 +5,80 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ZeroTrace - Dashboard</title>
   <style>
-    :root {
-      --bg: #fdfaf6;
-      --card: #ffffff;
-      --border: #000000;
-      --primary: #8de0b3;     /* Mint Green */
-      --secondary: #ffda59;   /* Yellow */
-      --discord: #a3b8ff;     /* Neo-brutalist Discord Blue */
-      --text: #000000;
-    }
+    /* Definisi Tema CLI */
+    body.theme-nord { --bg: #2e3440; --card: #3b4252; --border: #4c566a; --primary: #88c0d0; --secondary: #81a1c1; --text: #eceff4; --discord: #5e81ac; }
+    body.theme-dracula { --bg: #282a36; --card: #44475a; --border: #6272a4; --primary: #ff79c6; --secondary: #50fa7b; --text: #f8f8f2; --discord: #bd93f9; }
+    body.theme-gruvbox { --bg: #282828; --card: #3c3836; --border: #504945; --primary: #b8bb26; --secondary: #fabd2f; --text: #ebdbb2; --discord: #d3869b; }
+    body.theme-matrix { --bg: #0d0d0d; --card: #1a1a1a; --border: #00ff41; --primary: #00ff41; --secondary: #008f11; --text: #00ff41; --discord: #00ff41; }
+    body.theme-monokai { --bg: #272822; --card: #3e3d32; --border: #75715e; --primary: #a6e22e; --secondary: #fd971f; --text: #f8f8f2; --discord: #66d9ef; }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; }
-    body { background: var(--bg); color: var(--text); display: flex; flex-direction: column; align-items: center; justify-content: flex-start; min-height: 100vh; padding: 2.5rem 1.5rem; }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Consolas', 'Courier New', monospace; }
+    body { background: var(--bg); color: var(--text); display: flex; flex-direction: column; align-items: center; justify-content: flex-start; min-height: 100vh; padding: 2.5rem 1.5rem; transition: background 0.3s; }
 
-    .container {
-      width: 100%;
-      max-width: 480px;
-      display: flex;
-      flex-direction: column;
-      gap: 1.5rem;
-    }
+    /* Kontrol Tema di Kanan Atas */
+    .theme-switcher { position: absolute; top: 1.5rem; right: 1.5rem; }
+    .theme-switcher select { background: var(--card); color: var(--primary); border: 2px solid var(--border); padding: 0.5rem 1rem; border-radius: 8px; font-weight: bold; font-family: inherit; cursor: pointer; outline: none; box-shadow: 3px 3px 0px var(--border); transition: all 0.2s; }
+    .theme-switcher select:focus { transform: translate(2px, 2px); box-shadow: 1px 1px 0px var(--border); }
 
-    /* Greeting Section */
+    .container { width: 100%; max-width: 480px; display: flex; flex-direction: column; gap: 1.5rem; margin-top: 1rem; }
+
     .greeting-wrapper { display: flex; align-items: center; gap: 0.5rem; }
-    .greeting-box {
-      background: var(--primary);
-      border: 3px solid var(--border);
-      padding: 1rem 1.5rem;
-      border-radius: 16px; /* Tidak terlalu bundar */
-      font-size: 1.8rem;
-      font-weight: 900;
-      box-shadow: 6px 6px 0px var(--border);
-      letter-spacing: -0.03em;
-      line-height: 1.2;
-    }
+    .greeting-box { background: var(--primary); color: var(--bg); border: 3px solid var(--border); padding: 1rem 1.5rem; border-radius: 12px; font-size: 1.6rem; font-weight: 900; box-shadow: 6px 6px 0px var(--border); letter-spacing: -0.02em; line-height: 1.2; }
     .greeting-circle { width: 16px; height: 16px; background: var(--border); border-radius: 50%; flex-shrink: 0; }
 
-    .subtitle { font-size: 1rem; line-height: 1.5; font-weight: 500; color: #111; }
+    .subtitle { font-size: 0.95rem; line-height: 1.5; font-weight: bold; color: var(--text); opacity: 0.8; }
 
-    /* Time Widget */
-    .time-widget {
-      background: var(--card);
-      border: 3px solid var(--border);
-      border-radius: 12px;
-      padding: 0.8rem 1.2rem;
-      display: inline-flex;
-      flex-direction: column;
-      align-self: flex-start;
-      box-shadow: 5px 5px 0px var(--border);
-    }
-    .time-label { font-size: 0.75rem; font-weight: 800; text-transform: uppercase; margin-bottom: 0.2rem; letter-spacing: 0.05em; color: #444; }
-    .time-value { font-size: 1.8rem; font-weight: 900; letter-spacing: 0.05em; }
+    .time-widget { background: var(--card); border: 3px solid var(--border); border-radius: 12px; padding: 0.8rem 1.2rem; display: inline-flex; flex-direction: column; align-self: flex-start; box-shadow: 5px 5px 0px var(--border); }
+    .time-label { font-size: 0.75rem; font-weight: bold; text-transform: uppercase; margin-bottom: 0.2rem; letter-spacing: 0.05em; color: var(--secondary); }
+    .time-value { font-size: 1.8rem; font-weight: bold; letter-spacing: 0.05em; color: var(--primary); }
 
-    /* Action Card (Generate Links) */
-    .action-card {
-      background: var(--card);
-      border: 3px solid var(--border);
-      border-radius: 16px;
-      padding: 1.5rem;
-      box-shadow: 6px 6px 0px var(--border);
-      position: relative;
-    }
-    .action-icon {
-      position: absolute;
-      top: -12px;
-      right: 20px;
-      background: var(--secondary);
-      border: 3px solid var(--border);
-      width: 32px;
-      height: 32px;
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 3px 3px 0px var(--border);
-    }
-    .action-title { font-size: 0.85rem; font-weight: 800; text-transform: uppercase; color: #555; margin-bottom: 1rem; letter-spacing: 0.05em; }
+    .action-card { background: var(--card); border: 3px solid var(--border); border-radius: 16px; padding: 1.5rem; box-shadow: 6px 6px 0px var(--border); position: relative; }
+    .action-icon { position: absolute; top: -12px; right: 20px; background: var(--secondary); color: var(--bg); border: 3px solid var(--border); width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: bold; box-shadow: 3px 3px 0px var(--border); }
+    .action-title { font-size: 0.85rem; font-weight: bold; text-transform: uppercase; color: var(--secondary); margin-bottom: 1rem; letter-spacing: 0.05em; }
 
-    input {
-      width: 100%;
-      padding: 1.2rem;
-      background: var(--card);
-      border: 3px solid var(--border);
-      border-radius: 12px;
-      font-size: 1rem;
-      font-weight: 600;
-      outline: none;
-      margin-bottom: 1rem;
-      box-shadow: 4px 4px 0px var(--primary); /* Efek shadow hijau di belakang form */
-      transition: all 0.2s;
-    }
+    input { width: 100%; padding: 1.2rem; background: var(--bg); border: 3px solid var(--border); border-radius: 12px; color: var(--text); font-size: 1rem; outline: none; margin-bottom: 1rem; box-shadow: 4px 4px 0px var(--primary); transition: all 0.2s; font-family: inherit; }
     input:focus { transform: translate(2px, 2px); box-shadow: 2px 2px 0px var(--primary); }
 
-    button {
-      width: 100%;
-      padding: 1.2rem;
-      background: var(--primary);
-      color: var(--text);
-      border: 3px solid var(--border);
-      border-radius: 12px;
-      box-shadow: 4px 4px 0px var(--border);
-      font-size: 1rem;
-      font-weight: 800;
-      cursor: pointer;
-      transition: all 0.1s;
-    }
+    button { width: 100%; padding: 1.2rem; background: var(--primary); color: var(--bg); border: 3px solid var(--border); border-radius: 12px; box-shadow: 4px 4px 0px var(--border); font-size: 1rem; font-weight: bold; cursor: pointer; transition: all 0.1s; font-family: inherit; }
     button:active { transform: translate(4px, 4px); box-shadow: 0px 0px 0px var(--border); }
 
     .result { display: none; margin-top: 1.5rem; text-align: left; background: var(--bg); border: 3px solid var(--border); border-radius: 12px; padding: 1rem; }
-    .result label { font-size: 0.8rem; font-weight: 800; text-transform: uppercase; }
-    .result a { color: var(--text); font-weight: 700; word-break: break-all; text-decoration: none; display: block; margin-top: 0.5rem; font-size: 0.95rem; }
+    .result label { font-size: 0.8rem; font-weight: bold; color: var(--secondary); text-transform: uppercase; }
+    .result a { color: var(--primary); font-weight: bold; word-break: break-all; text-decoration: none; display: block; margin-top: 0.5rem; font-size: 0.95rem; }
 
-    /* Community Widget */
-    .community-card {
-      background: var(--card);
-      border: 3px solid var(--border);
-      border-radius: 16px;
-      padding: 1.5rem;
-      box-shadow: 6px 6px 0px var(--border);
-    }
-    .com-header { display: flex; align-items: center; gap: 0.5rem; font-weight: 800; font-size: 1.2rem; margin-bottom: 0.75rem; }
+    .community-card { background: var(--card); border: 3px solid var(--border); border-radius: 16px; padding: 1.5rem; box-shadow: 6px 6px 0px var(--border); }
+    .com-header { display: flex; align-items: center; gap: 0.5rem; font-weight: bold; font-size: 1.2rem; margin-bottom: 0.75rem; color: var(--primary); }
     .com-dot { width: 12px; height: 12px; background: var(--primary); border: 2px solid var(--border); border-radius: 50%; }
-    .com-desc { font-size: 0.95rem; font-weight: 500; line-height: 1.5; margin-bottom: 1.5rem; color: #222; }
-
-    .com-buttons { display: flex; gap: 0.75rem; flex-wrap: wrap; }
-    .com-buttons-row { display: flex; gap: 0.75rem; width: 100%; }
-    .btn-com {
-      flex: 1;
-      text-align: center;
-      padding: 0.85rem;
-      border: 3px solid var(--border);
-      border-radius: 12px;
-      font-weight: 800;
-      font-size: 0.95rem;
-      text-decoration: none;
-      color: var(--text);
-      box-shadow: 4px 4px 0px var(--border);
-      transition: transform 0.1s;
-    }
+    .com-desc { font-size: 0.95rem; line-height: 1.5; margin-bottom: 1.5rem; color: var(--text); opacity: 0.8; }
+    .com-buttons-row { display: flex; gap: 0.75rem; width: 100%; margin-bottom: 0.75rem; }
+    .btn-com { flex: 1; text-align: center; padding: 0.85rem; border: 3px solid var(--border); border-radius: 12px; font-weight: bold; font-size: 0.95rem; text-decoration: none; color: var(--bg); box-shadow: 4px 4px 0px var(--border); transition: transform 0.1s; }
     .btn-com:active { transform: translate(4px, 4px); box-shadow: 0px 0px 0px var(--border); }
     .btn-wa { background: var(--primary); }
     .btn-tg { background: var(--secondary); }
-    .btn-dc { background: var(--discord); width: 100%; }
+    .btn-dc { background: var(--discord); width: 100%; display: block; }
 
   </style>
 </head>
-<body>
+<body class="theme-nord">
+
+  <div class="theme-switcher">
+    <select id="themeSelect" onchange="switchTheme()">
+      <option value="theme-nord">Nord</option>
+      <option value="theme-dracula">Dracula</option>
+      <option value="theme-gruvbox">Gruvbox</option>
+      <option value="theme-matrix">Matrix</option>
+      <option value="theme-monokai">Monokai</option>
+    </select>
+  </div>
 
   <div class="container">
 
     <div class="greeting-wrapper">
-      <div class="greeting-box" id="greetingText">Good Night,<br>noxm007</div>
+      <div class="greeting-box" id="greetingText">Good Night,<br>Agent</div>
       <div class="greeting-circle"></div>
     </div>
 
-    <p class="subtitle">Your control plane. Sembunyikan URL, lindungi akses, dan hindari pelacakan bot dari satu tempat.</p>
+    <p class="subtitle">> Control plane. Sembunyikan URL dan hindari pelacakan bot dari satu tempat.</p>
 
     <div class="time-widget">
       <div class="time-label">LOCAL TIME</div>
@@ -167,7 +86,7 @@
     </div>
 
     <div class="action-card">
-      <div class="action-title">GENERATE LINKS</div>
+      <div class="action-title">GENERATE_LINKS</div>
       <div class="action-icon">⚡</div>
 
       <input type="url" id="targetUrl" placeholder="https://example.com/rahasia" required />
@@ -181,9 +100,9 @@
 
     <div class="community-card">
       <div class="com-header">
-        <div class="com-dot"></div> Join Community
+        <div class="com-dot"></div> Join_Community
       </div>
-      <p class="com-desc">Gabung ke saluran WhatsApp, grup Telegram, & server Discord resmi untuk update terbaru dan info maintenance.</p>
+      <p class="com-desc">> Gabung ke saluran resmi untuk update terbaru dan log maintenance.</p>
       <div class="com-buttons">
         <div class="com-buttons-row">
           <a href="https://chat.whatsapp.com/B9t6HZLK8IS01S4o6fmyAY" class="btn-com btn-wa">WhatsApp</a>
@@ -196,20 +115,25 @@
   </div>
 
   <script>
+    // Sistem Tema
+    const savedTheme = localStorage.getItem('zt-theme') || 'theme-nord';
+    document.body.className = savedTheme;
+    document.getElementById('themeSelect').value = savedTheme;
+
+    function switchTheme() {
+      const selected = document.getElementById('themeSelect').value;
+      document.body.className = selected;
+      localStorage.setItem('zt-theme', selected);
+    }
+
     // Dinamis Sapaan Berdasarkan Waktu
     function updateGreeting() {
       const hour = new Date().getHours();
-      let greeting = "Good Night"; // Default jam 18:00 ke atas sampai malam
-      
-      if (hour >= 5 && hour < 12) {
-        greeting = "Good Morning";
-      } else if (hour >= 12 && hour < 15) {
-        greeting = "Good Afternoon";
-      } else if (hour >= 15 && hour < 18) { // Sore dibatasi sampai jam 17:59
-        greeting = "Good Evening";
-      }
-
-      document.getElementById('greetingText').innerHTML = `${greeting},<br>noxm007`;
+      let greeting = "Good Night"; 
+      if (hour >= 5 && hour < 12) greeting = "Good Morning";
+      else if (hour >= 12 && hour < 15) greeting = "Good Afternoon";
+      else if (hour >= 15 && hour < 18) greeting = "Good Evening";
+      document.getElementById('greetingText').innerHTML = `${greeting},<br>Dev`;
     }
 
     // Jam Real-time
@@ -233,11 +157,7 @@
       btn.disabled = true;
 
       try {
-        const res = await fetch('/api/create', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ url })
-        });
+        const res = await fetch('/api/create', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ url }) });
         const data = await res.json();
         if (data.token) {
           const out = `${window.location.origin}/s/${data.token}`;
@@ -246,9 +166,7 @@
           link.href = out;
           link.innerText = out;
           box.style.display = 'block';
-        } else {
-          alert(data.error || 'Terjadi kesalahan.');
-        }
+        } else alert(data.error || 'Terjadi kesalahan.');
       } catch (err) {
         alert('Gagal terhubung ke API.');
       } finally {
