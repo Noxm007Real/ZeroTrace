@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ZeroTrace - Anti-Trace Gateway</title>
+  <style>
+    :root {
+      --bg: #090d16;
+      --card: #111827;
+      --border: #1f293d;
+      --accent: #38bdf8;
+      --text: #f3f4f6;
+      --subtext: #9ca3af;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; }
+    body { background: var(--bg); color: var(--text); display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; padding: 1.5rem; }
+    .container { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 2.5rem; width: 100%; max-width: 460px; box-shadow: 0 20px 40px rgba(0,0,0,0.4); text-align: center; }
+    .badge { display: inline-block; padding: 0.25rem 0.75rem; background: rgba(56, 189, 248, 0.1); border: 1px solid rgba(56, 189, 248, 0.2); color: var(--accent); border-radius: 9999px; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 1rem; }
+    h1 { font-size: 1.75rem; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 0.5rem; }
+    p { color: var(--subtext); font-size: 0.9rem; line-height: 1.5; margin-bottom: 1.75rem; }
+    input { width: 100%; padding: 0.85rem 1rem; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-size: 0.95rem; outline: none; transition: border 0.2s; margin-bottom: 1rem; }
+    input:focus { border-color: var(--accent); }
+    button { width: 100%; padding: 0.85rem; background: var(--accent); color: #090d16; border: none; border-radius: 8px; font-size: 0.95rem; font-weight: 700; cursor: pointer; transition: opacity 0.2s; }
+    button:hover { opacity: 0.9; }
+    .result { display: none; margin-top: 1.5rem; text-align: left; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 1rem; }
+    .result label { font-size: 0.75rem; color: var(--subtext); text-transform: uppercase; font-weight: 600; }
+    .result a { color: var(--accent); word-break: break-all; text-decoration: none; display: block; margin-top: 0.35rem; font-size: 0.9rem; }
+    footer { margin-top: 2rem; font-size: 0.8rem; color: var(--subtext); }
+    footer span { color: var(--accent); font-weight: 600; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="badge">Zero-Trace Protocol</div>
+    <h1>ZeroTrace</h1>
+    <p>Sembunyikan URL tujuan asli di balik rantai tantangan enkriptik dinamis tanpa jejak pelacak bot.</p>
+    
+    <input type="url" id="targetUrl" placeholder="https://example.com/file-secret" required />
+    <button onclick="createZeroTrace()">Kunci & Terbitkan URL</button>
+
+    <div id="resultBox" class="result">
+      <label>Tautan Terproteksi</label>
+      <a id="linkResult" href="#" target="_blank"></a>
+    </div>
+  </div>
+
+  <footer>
+    Crafted with precision by <span>noxm007</span>
+  </footer>
+
+  <script>
+    async function createZeroTrace() {
+      const url = document.getElementById('targetUrl').value.trim();
+      if (!url) return alert('Harap masukkan URL yang valid!');
+
+      const btn = document.querySelector('button');
+      btn.innerText = 'Mengenkripsi...';
+      btn.disabled = true;
+
+      try {
+        const res = await fetch('/api/create', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ url })
+        });
+        const data = await res.json();
+        if (data.token) {
+          const out = `${window.location.origin}/s/${data.token}`;
+          const box = document.getElementById('resultBox');
+          const link = document.getElementById('linkResult');
+          link.href = out;
+          link.innerText = out;
+          box.style.display = 'block';
+        } else {
+          alert(data.error || 'Terjadi kesalahan.');
+        }
+      } catch (err) {
+        alert('Gagal terhubung ke API.');
+      } finally {
+        btn.innerText = 'Kunci & Terbitkan URL';
+        btn.disabled = false;
+      }
+    }
+  </script>
+</body>
+</html>
