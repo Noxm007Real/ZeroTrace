@@ -6,35 +6,89 @@
   <title>ZeroTrace - Anti-Trace Gateway</title>
   <style>
     :root {
-      --bg: #090d16;
-      --card: #111827;
-      --border: #1f293d;
-      --accent: #38bdf8;
-      --text: #f3f4f6;
-      --subtext: #9ca3af;
+      --bg: #fdfaf6;
+      --card: #ffffff;
+      --border: #000000;
+      --primary: #8de0b3;
+      --secondary: #ffda59;
+      --text: #000000;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; }
     body { background: var(--bg); color: var(--text); display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; padding: 1.5rem; }
-    .container { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 2.5rem; width: 100%; max-width: 460px; box-shadow: 0 20px 40px rgba(0,0,0,0.4); text-align: center; }
-    .badge { display: inline-block; padding: 0.25rem 0.75rem; background: rgba(56, 189, 248, 0.1); border: 1px solid rgba(56, 189, 248, 0.2); color: var(--accent); border-radius: 9999px; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 1rem; }
-    h1 { font-size: 1.75rem; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 0.5rem; }
-    p { color: var(--subtext); font-size: 0.9rem; line-height: 1.5; margin-bottom: 1.75rem; }
-    input { width: 100%; padding: 0.85rem 1rem; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-size: 0.95rem; outline: none; transition: border 0.2s; margin-bottom: 1rem; }
-    input:focus { border-color: var(--accent); }
-    button { width: 100%; padding: 0.85rem; background: var(--accent); color: #090d16; border: none; border-radius: 8px; font-size: 0.95rem; font-weight: 700; cursor: pointer; transition: opacity 0.2s; }
-    button:hover { opacity: 0.9; }
-    .result { display: none; margin-top: 1.5rem; text-align: left; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 1rem; }
-    .result label { font-size: 0.75rem; color: var(--subtext); text-transform: uppercase; font-weight: 600; }
-    .result a { color: var(--accent); word-break: break-all; text-decoration: none; display: block; margin-top: 0.35rem; font-size: 0.9rem; }
-    footer { margin-top: 2rem; font-size: 0.8rem; color: var(--subtext); }
-    footer span { color: var(--accent); font-weight: 600; }
+    
+    .container { 
+      background: var(--card); 
+      border: 3px solid var(--border); 
+      border-radius: 16px; 
+      padding: 2.5rem; 
+      width: 100%; 
+      max-width: 460px; 
+      box-shadow: 6px 6px 0px var(--border); 
+      text-align: center; 
+    }
+    
+    .badge { 
+      display: inline-block; 
+      padding: 0.4rem 1rem; 
+      background: var(--secondary); 
+      border: 2px solid var(--border); 
+      box-shadow: 3px 3px 0px var(--border);
+      color: var(--text); 
+      border-radius: 9999px; 
+      font-size: 0.8rem; 
+      font-weight: 800; 
+      letter-spacing: 0.05em; 
+      text-transform: uppercase; 
+      margin-bottom: 1.5rem; 
+    }
+    
+    h1 { font-size: 2rem; font-weight: 800; margin-bottom: 0.5rem; letter-spacing: -0.03em; }
+    p { font-size: 0.95rem; line-height: 1.5; margin-bottom: 1.75rem; font-weight: 500; }
+    
+    input { 
+      width: 100%; 
+      padding: 1rem; 
+      background: var(--card); 
+      border: 3px solid var(--border); 
+      border-radius: 12px; 
+      color: var(--text); 
+      font-size: 1rem; 
+      font-weight: 600;
+      outline: none; 
+      margin-bottom: 1rem; 
+      transition: all 0.2s;
+    }
+    input:focus { box-shadow: 4px 4px 0px var(--primary); transform: translate(-2px, -2px); }
+    
+    button { 
+      width: 100%; 
+      padding: 1rem; 
+      background: var(--primary); 
+      color: var(--text); 
+      border: 3px solid var(--border); 
+      border-radius: 12px; 
+      box-shadow: 4px 4px 0px var(--border);
+      font-size: 1rem; 
+      font-weight: 800; 
+      cursor: pointer; 
+      transition: all 0.1s; 
+    }
+    button:active { transform: translate(4px, 4px); box-shadow: 0px 0px 0px var(--border); }
+    
+    .result { display: none; margin-top: 1.5rem; text-align: left; background: var(--card); border: 3px solid var(--border); border-radius: 12px; padding: 1rem; box-shadow: 4px 4px 0px var(--secondary); }
+    .result label { font-size: 0.8rem; font-weight: 800; text-transform: uppercase; }
+    .result a { color: var(--text); font-weight: 700; word-break: break-all; text-decoration: none; display: block; margin-top: 0.5rem; font-size: 0.95rem; }
+    .result a:hover { text-decoration: underline; }
+    
+    footer { margin-top: 2rem; font-size: 0.85rem; font-weight: 600; }
+    footer span { background: var(--primary); padding: 0.1rem 0.4rem; border: 2px solid var(--border); border-radius: 4px; }
   </style>
 </head>
 <body>
   <div class="container">
     <div class="badge">Zero-Trace Protocol</div>
     <h1>ZeroTrace</h1>
-    <p>Sembunyikan URL tujuan asli di balik rantai tantangan enkriptik dinamis tanpa jejak pelacak bot.</p>
+    <p>Sembunyikan URL tujuan asli di balik rantai tantangan enkriptik dinamis tanpa jejak bot.</p>
     
     <input type="url" id="targetUrl" placeholder="https://example.com/file-secret" required />
     <button onclick="createZeroTrace()">Kunci & Terbitkan URL</button>
@@ -46,7 +100,7 @@
   </div>
 
   <footer>
-    Crafted with precision by <span>noxm007</span>
+    Crafted by <span>noxm007</span>
   </footer>
 
   <script>
