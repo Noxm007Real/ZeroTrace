@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ZeroTrace - Dashboard</title>
   <style>
-    /* Definisi Tema CLI */
+    /* Definisi Tema */
+    body.theme-neo { --bg: #fdfaf6; --card: #ffffff; --border: #000000; --primary: #8de0b3; --secondary: #ffda59; --text: #000000; --discord: #a3b8ff; }
     body.theme-nord { --bg: #2e3440; --card: #3b4252; --border: #4c566a; --primary: #88c0d0; --secondary: #81a1c1; --text: #eceff4; --discord: #5e81ac; }
     body.theme-dracula { --bg: #282a36; --card: #44475a; --border: #6272a4; --primary: #ff79c6; --secondary: #50fa7b; --text: #f8f8f2; --discord: #bd93f9; }
     body.theme-gruvbox { --bg: #282828; --card: #3c3836; --border: #504945; --primary: #b8bb26; --secondary: #fabd2f; --text: #ebdbb2; --discord: #d3869b; }
@@ -13,45 +14,108 @@
     body.theme-monokai { --bg: #272822; --card: #3e3d32; --border: #75715e; --primary: #a6e22e; --secondary: #fd971f; --text: #f8f8f2; --discord: #66d9ef; }
 
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Consolas', 'Courier New', monospace; }
-    body { background: var(--bg); color: var(--text); display: flex; flex-direction: column; align-items: center; justify-content: flex-start; min-height: 100vh; padding: 2.5rem 1.5rem; transition: background 0.3s; }
+    /* Padding bawah diperbesar agar tidak tertutup widget mengambang */
+    body { background: var(--bg); color: var(--text); display: flex; flex-direction: column; align-items: center; justify-content: flex-start; min-height: 100vh; padding: 2.5rem 1.5rem 120px 1.5rem; transition: background 0.3s; }
 
-    /* Kontrol Tema di Kanan Atas */
-    .theme-switcher { position: absolute; top: 1.5rem; right: 1.5rem; }
-    .theme-switcher select { background: var(--card); color: var(--primary); border: 2px solid var(--border); padding: 0.5rem 1rem; border-radius: 8px; font-weight: bold; font-family: inherit; cursor: pointer; outline: none; box-shadow: 3px 3px 0px var(--border); transition: all 0.2s; }
-    .theme-switcher select:focus { transform: translate(2px, 2px); box-shadow: 1px 1px 0px var(--border); }
+    /* Kontrol Tema di Kanan Atas dengan Desain Baru */
+    .theme-switcher { 
+      position: absolute; 
+      top: 1.5rem; 
+      right: 1.5rem; 
+      background: var(--card); 
+      border: 3px solid var(--border); 
+      border-radius: 12px; 
+      display: flex; 
+      align-items: center; 
+      padding: 0.2rem 0.5rem 0.2rem 0.8rem;
+      box-shadow: 4px 4px 0px var(--border);
+    }
+    .theme-switcher span { font-weight: 900; color: var(--primary); margin-right: 0.5rem; font-size: 0.9rem; }
+    .theme-switcher select { background: transparent; color: var(--text); border: none; font-weight: bold; font-family: inherit; cursor: pointer; outline: none; padding: 0.5rem; }
 
     .container { width: 100%; max-width: 480px; display: flex; flex-direction: column; gap: 1.5rem; margin-top: 1rem; }
 
     .greeting-wrapper { display: flex; align-items: center; gap: 0.5rem; }
     .greeting-box { background: var(--primary); color: var(--bg); border: 3px solid var(--border); padding: 1rem 1.5rem; border-radius: 12px; font-size: 1.6rem; font-weight: 900; box-shadow: 6px 6px 0px var(--border); letter-spacing: -0.02em; line-height: 1.2; }
+    /* Penyesuaian teks agar tetap terbaca jika temanya terang (Neo) */
+    body.theme-neo .greeting-box { color: var(--text); }
+    
     .greeting-circle { width: 16px; height: 16px; background: var(--border); border-radius: 50%; flex-shrink: 0; }
 
     .subtitle { font-size: 0.95rem; line-height: 1.5; font-weight: bold; color: var(--text); opacity: 0.8; }
 
     .time-widget { background: var(--card); border: 3px solid var(--border); border-radius: 12px; padding: 0.8rem 1.2rem; display: inline-flex; flex-direction: column; align-self: flex-start; box-shadow: 5px 5px 0px var(--border); }
     .time-label { font-size: 0.75rem; font-weight: bold; text-transform: uppercase; margin-bottom: 0.2rem; letter-spacing: 0.05em; color: var(--secondary); }
+    body.theme-neo .time-label { color: var(--text); opacity: 0.7; }
     .time-value { font-size: 1.8rem; font-weight: bold; letter-spacing: 0.05em; color: var(--primary); }
+    body.theme-neo .time-value { color: var(--text); }
 
     .action-card { background: var(--card); border: 3px solid var(--border); border-radius: 16px; padding: 1.5rem; box-shadow: 6px 6px 0px var(--border); position: relative; }
     .action-icon { position: absolute; top: -12px; right: 20px; background: var(--secondary); color: var(--bg); border: 3px solid var(--border); width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: bold; box-shadow: 3px 3px 0px var(--border); }
+    body.theme-neo .action-icon { color: var(--text); }
     .action-title { font-size: 0.85rem; font-weight: bold; text-transform: uppercase; color: var(--secondary); margin-bottom: 1rem; letter-spacing: 0.05em; }
+    body.theme-neo .action-title { color: var(--text); opacity: 0.6; }
 
     input { width: 100%; padding: 1.2rem; background: var(--bg); border: 3px solid var(--border); border-radius: 12px; color: var(--text); font-size: 1rem; outline: none; margin-bottom: 1rem; box-shadow: 4px 4px 0px var(--primary); transition: all 0.2s; font-family: inherit; }
     input:focus { transform: translate(2px, 2px); box-shadow: 2px 2px 0px var(--primary); }
 
     button { width: 100%; padding: 1.2rem; background: var(--primary); color: var(--bg); border: 3px solid var(--border); border-radius: 12px; box-shadow: 4px 4px 0px var(--border); font-size: 1rem; font-weight: bold; cursor: pointer; transition: all 0.1s; font-family: inherit; }
+    body.theme-neo button { color: var(--text); }
     button:active { transform: translate(4px, 4px); box-shadow: 0px 0px 0px var(--border); }
 
     .result { display: none; margin-top: 1.5rem; text-align: left; background: var(--bg); border: 3px solid var(--border); border-radius: 12px; padding: 1rem; }
     .result label { font-size: 0.8rem; font-weight: bold; color: var(--secondary); text-transform: uppercase; }
+    body.theme-neo .result label { color: var(--text); }
     .result a { color: var(--primary); font-weight: bold; word-break: break-all; text-decoration: none; display: block; margin-top: 0.5rem; font-size: 0.95rem; }
+    body.theme-neo .result a { color: var(--text); }
 
-    .community-card { background: var(--card); border: 3px solid var(--border); border-radius: 16px; padding: 1.5rem; box-shadow: 6px 6px 0px var(--border); }
+    /* Community Widget (Floating / Mengambang di Bawah) */
+    .community-card { 
+      position: fixed;
+      bottom: 1.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      width: calc(100% - 3rem);
+      max-width: 480px;
+      background: var(--card); 
+      border: 3px solid var(--border); 
+      border-radius: 16px; 
+      padding: 1.5rem; 
+      box-shadow: 6px 6px 0px var(--border);
+      z-index: 100;
+      animation: slideUp 0.5s ease-out;
+    }
+    @keyframes slideUp { from { bottom: -100px; opacity: 0; } to { bottom: 1.5rem; opacity: 1; } }
+
+    /* Tombol Close "X" */
+    .btn-close {
+      position: absolute;
+      top: -12px;
+      right: -12px;
+      background: #ff5555;
+      color: white;
+      border: 3px solid var(--border);
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      font-weight: 900;
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 3px 3px 0px var(--border);
+      transition: all 0.1s;
+    }
+    .btn-close:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0px var(--border); }
+
     .com-header { display: flex; align-items: center; gap: 0.5rem; font-weight: bold; font-size: 1.2rem; margin-bottom: 0.75rem; color: var(--primary); }
+    body.theme-neo .com-header { color: var(--text); }
     .com-dot { width: 12px; height: 12px; background: var(--primary); border: 2px solid var(--border); border-radius: 50%; }
-    .com-desc { font-size: 0.95rem; line-height: 1.5; margin-bottom: 1.5rem; color: var(--text); opacity: 0.8; }
+    .com-desc { font-size: 0.85rem; line-height: 1.4; margin-bottom: 1.25rem; color: var(--text); opacity: 0.9; }
     .com-buttons-row { display: flex; gap: 0.75rem; width: 100%; margin-bottom: 0.75rem; }
-    .btn-com { flex: 1; text-align: center; padding: 0.85rem; border: 3px solid var(--border); border-radius: 12px; font-weight: bold; font-size: 0.95rem; text-decoration: none; color: var(--bg); box-shadow: 4px 4px 0px var(--border); transition: transform 0.1s; }
+    .btn-com { flex: 1; text-align: center; padding: 0.7rem; border: 3px solid var(--border); border-radius: 12px; font-weight: bold; font-size: 0.9rem; text-decoration: none; color: var(--bg); box-shadow: 4px 4px 0px var(--border); transition: transform 0.1s; }
+    body.theme-neo .btn-com { color: var(--text); }
     .btn-com:active { transform: translate(4px, 4px); box-shadow: 0px 0px 0px var(--border); }
     .btn-wa { background: var(--primary); }
     .btn-tg { background: var(--secondary); }
@@ -59,10 +123,12 @@
 
   </style>
 </head>
-<body class="theme-nord">
+<body class="theme-neo">
 
   <div class="theme-switcher">
+    <span>🔮 >_Theme</span>
     <select id="themeSelect" onchange="switchTheme()">
+      <option value="theme-neo">Neo Brutal</option>
       <option value="theme-nord">Nord</option>
       <option value="theme-dracula">Dracula</option>
       <option value="theme-gruvbox">Gruvbox</option>
@@ -98,25 +164,27 @@
       </div>
     </div>
 
-    <div class="community-card">
-      <div class="com-header">
-        <div class="com-dot"></div> Join_Community
-      </div>
-      <p class="com-desc">> Gabung ke saluran resmi untuk update terbaru dan log maintenance.</p>
-      <div class="com-buttons">
-        <div class="com-buttons-row">
-          <a href="https://chat.whatsapp.com/B9t6HZLK8IS01S4o6fmyAY" class="btn-com btn-wa">WhatsApp</a>
-          <a href="https://t.me/slowliving_w_nox" class="btn-com btn-tg">Telegram</a>
-        </div>
-        <a href="https://discord.gg/TxxXY9ZF2" class="btn-com btn-dc">Discord</a>
-      </div>
-    </div>
+  </div>
 
+  <!-- Floating Community Widget -->
+  <div class="community-card" id="communityWidget">
+    <button class="btn-close" onclick="closeCommunity()">X</button>
+    <div class="com-header">
+      <div class="com-dot"></div> Join_Community
+    </div>
+    <p class="com-desc">> Gabung ke saluran resmi untuk update terbaru dan log maintenance.</p>
+    <div class="com-buttons">
+      <div class="com-buttons-row">
+        <a href="https://chat.whatsapp.com/B9t6HZLK8IS01S4o6fmyAY" class="btn-com btn-wa" target="_blank">WhatsApp</a>
+        <a href="https://t.me/slowliving_w_nox" class="btn-com btn-tg" target="_blank">Telegram</a>
+      </div>
+      <a href="https://discord.gg/TxxXY9ZF2" class="btn-com btn-dc" target="_blank">Discord</a>
+    </div>
   </div>
 
   <script>
     // Sistem Tema
-    const savedTheme = localStorage.getItem('zt-theme') || 'theme-nord';
+    const savedTheme = localStorage.getItem('zt-theme') || 'theme-neo';
     document.body.className = savedTheme;
     document.getElementById('themeSelect').value = savedTheme;
 
@@ -126,6 +194,15 @@
       localStorage.setItem('zt-theme', selected);
     }
 
+    // Sistem Widget & Audio
+    // GANTI URL DI BAWAH INI DENGAN URL MP3/AUDIO ANDA NANTINYA
+    const closeAudio = new Audio('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3'); 
+    
+    function closeCommunity() {
+      document.getElementById('communityWidget').style.display = 'none';
+      closeAudio.play().catch(error => console.log("Audio diblokir oleh browser:", error));
+    }
+
     // Dinamis Sapaan Berdasarkan Waktu
     function updateGreeting() {
       const hour = new Date().getHours();
@@ -133,7 +210,8 @@
       if (hour >= 5 && hour < 12) greeting = "Good Morning";
       else if (hour >= 12 && hour < 15) greeting = "Good Afternoon";
       else if (hour >= 15 && hour < 18) greeting = "Good Evening";
-      document.getElementById('greetingText').innerHTML = `${greeting},<br>Dev`;
+      // Konsisten menggunakan panggilan "Agent"
+      document.getElementById('greetingText').innerHTML = `${greeting},<br>Agent`;
     }
 
     // Jam Real-time
